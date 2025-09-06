@@ -1,0 +1,98 @@
+version: 2
+
+sources:
+  - name: ecommerce_raw
+    description: "ECサイトの生データテーブル"
+    tables:
+      - name: users
+        description: "ユーザー情報"
+        columns:
+          - name: user_id
+            description: "ユーザーID"
+            tests:
+              - unique
+              - not_null
+          - name: email
+            description: "メールアドレス"
+            tests:
+              - unique
+              - not_null
+          - name: name
+            description: "ユーザー名"
+            tests:
+              - not_null
+
+      - name: products
+        description: "商品情報"
+        columns:
+          - name: product_id
+            description: "商品ID"
+            tests:
+              - unique
+              - not_null
+          - name: name
+            description: "商品名"
+            tests:
+              - not_null
+          - name: price
+            description: "商品価格"
+            tests:
+              - not_null
+
+      - name: orders
+        description: "注文情報"
+        columns:
+          - name: order_id
+            description: "注文ID"
+            tests:
+              - unique
+              - not_null
+          - name: user_id
+            description: "ユーザーID"
+            tests:
+              - not_null
+              - relationships:
+                  to: source('ecommerce_raw', 'users')
+                  field: user_id
+          - name: status
+            description: "注文ステータス"
+            tests:
+              - accepted_values:
+                  values: ['完了', '処理中', 'キャンセル', '返品']
+
+      - name: order_items
+        description: "注文商品明細"
+        columns:
+          - name: order_item_id
+            description: "注文商品明細ID"
+            tests:
+              - unique
+              - not_null
+          - name: order_id
+            description: "注文ID"
+            tests:
+              - not_null
+              - relationships:
+                  to: source('ecommerce_raw', 'orders')
+                  field: order_id
+          - name: product_id
+            description: "商品ID"
+            tests:
+              - not_null
+              - relationships:
+                  to: source('ecommerce_raw', 'products')
+                  field: product_id
+
+      - name: access_logs
+        description: "アクセスログ"
+        columns:
+          - name: timestamp
+            description: "アクセス時刻"
+            tests:
+              - not_null
+          - name: user_id
+            description: "ユーザーID"
+          - name: session_id
+            description: "セッションID"
+            tests:
+              - not_null

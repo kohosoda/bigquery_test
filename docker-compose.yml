@@ -1,0 +1,32 @@
+services:
+  bigquery-importer:
+    build:
+      context: ./bigquery-importer
+      dockerfile: Dockerfile
+    volumes:
+      - ./bigquery-importer:/app
+      - ./data:/app/data
+      - ~/.config/gcloud:/root/.config/gcloud:ro
+    environment:
+      - GOOGLE_APPLICATION_CREDENTIALS=/root/.config/gcloud/application_default_credentials.json
+      - PYTHONUNBUFFERED=1
+      - GCP_PROJECT_ID=${GCP_PROJECT_ID}
+      - GCS_BUCKET_NAME=${GCS_BUCKET_NAME}
+      - BIGQUERY_DATASET=${BIGQUERY_DATASET}
+    working_dir: /app
+    command: tail -f /dev/null # Keep container running for development
+
+  dbt:
+    build:
+      context: ./dbt
+      dockerfile: Dockerfile
+    volumes:
+      - ./dbt:/usr/app
+      - ~/.config/gcloud:/root/.config/gcloud:ro
+    environment:
+      - GOOGLE_APPLICATION_CREDENTIALS=/root/.config/gcloud/application_default_credentials.json
+      - GCP_PROJECT_ID=${GCP_PROJECT_ID}
+      - GCS_BUCKET_NAME=${GCS_BUCKET_NAME}
+      - BIGQUERY_DATASET=${BIGQUERY_DATASET}
+    working_dir: /usr/app
+    command: tail -f /dev/null # Keep container running for development
