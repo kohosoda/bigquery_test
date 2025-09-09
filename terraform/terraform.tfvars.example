@@ -1,0 +1,17 @@
+# Terraform変数の設定例ファイル
+# このファイルをコピーして terraform.tfvars を作成し、実際の値を設定してください
+
+# GCPプロジェクトID（必須）
+gcp_project_id = "your-gcp-project-id"
+
+# BigQueryデータセットID（デフォルト: ecommerce_data）
+bigquery_dataset_id = "ecommerce_data"
+
+# GCPリージョン（デフォルト: asia-northeast1）
+region = "asia-northeast1"
+
+# 環境名（デフォルト: dev）
+environment = "dev"
+
+# データセットオーナーのメールアドレス（必須）
+dataset_owner_email = "your-email@example.com"

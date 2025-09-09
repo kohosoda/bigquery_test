@@ -1,0 +1,11 @@
+# Terraform関連ファイル
+*.tfstate
+*.tfstate.*
+*.tfvars
+!*.tfvars.example
+.terraform/
+.terraform.lock.hcl
+
+# OS生成ファイル
+.DS_Store
+Thumbs.db
