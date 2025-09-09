@@ -11,7 +11,7 @@ WITH source_data AS (
         referrer,
         device_type,
         CURRENT_TIMESTAMP() AS loaded_at
-    FROM {{ source('ecommerce_raw', 'access_logs') }}
+    FROM {{ source('ecommerce_data', 'access_logs') }}
 )
 
 SELECT * FROM source_data

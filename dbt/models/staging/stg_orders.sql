@@ -9,7 +9,7 @@ WITH source_data AS (
         status,
         payment_method,
         CURRENT_TIMESTAMP() AS loaded_at
-    FROM {{ source('ecommerce_raw', 'orders') }}
+    FROM {{ source('ecommerce_data', 'orders') }}
 )
 
 SELECT * FROM source_data

@@ -10,7 +10,7 @@ WITH source_data AS (
         brand,
         rating,
         CURRENT_TIMESTAMP() AS loaded_at
-    FROM {{ source('ecommerce_raw', 'products') }}
+    FROM {{ source('ecommerce_data', 'products') }}
 )
 
 SELECT * FROM source_data

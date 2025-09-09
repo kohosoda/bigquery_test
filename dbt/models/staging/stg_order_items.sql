@@ -9,7 +9,7 @@ WITH source_data AS (
         unit_price,
         quantity * unit_price AS line_total,
         CURRENT_TIMESTAMP() AS loaded_at
-    FROM {{ source('ecommerce_raw', 'order_items') }}
+    FROM {{ source('ecommerce_data', 'order_items') }}
 )
 
 SELECT * FROM source_data

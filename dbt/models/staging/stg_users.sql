@@ -11,7 +11,7 @@ WITH source_data AS (
         city,
         prefecture,
         CURRENT_TIMESTAMP() AS loaded_at
-    FROM {{ source('ecommerce_raw', 'users') }}
+    FROM {{ source('ecommerce_data', 'users') }}
 )
 
 SELECT * FROM source_data

@@ -1,7 +1,7 @@
 version: 2
 
 sources:
-  - name: ecommerce_raw
+  - name: ecommerce_data
     description: "ECサイトの生データテーブル"
     tables:
       - name: users
@@ -52,7 +52,7 @@ sources:
             tests:
               - not_null
               - relationships:
-                  to: source('ecommerce_raw', 'users')
+                  to: source('ecommerce_data', 'users')
                   field: user_id
           - name: status
             description: "注文ステータス"
@@ -73,14 +73,14 @@ sources:
             tests:
               - not_null
               - relationships:
-                  to: source('ecommerce_raw', 'orders')
+                  to: source('ecommerce_data', 'orders')
                   field: order_id
           - name: product_id
             description: "商品ID"
             tests:
               - not_null
               - relationships:
-                  to: source('ecommerce_raw', 'products')
+                  to: source('ecommerce_data', 'products')
                   field: product_id
 
       - name: access_logs
