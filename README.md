@@ -23,6 +23,7 @@
 - **言語**: Python 3.11
 - **コンテナ**: Docker Compose
 - **データ変換**: dbt-bigquery
+- **インフラ管理**: Terraform
 - **クラウド**: Google Cloud Platform (BigQuery, Cloud Storage)
 - **分析**: Jupyter Notebook, Looker Studio
 
@@ -46,6 +47,7 @@
 ### 1. 前提条件
 
 - Docker & Docker Compose
+- Terraform（v1.0以上）
 - Google Cloud Platform アカウント
 - gcloud CLI のインストールと認証
 
@@ -70,9 +72,30 @@ cp env.example .env
 vi .env
 ```
 
-### 4. Docker環境の起動
+### 4. Terraformでインフラ構築
 
 ```bash
+# Terraformディレクトリに移動
+cd terraform
+
+# Terraform設定ファイルの作成
+cp terraform.tfvars.example terraform.tfvars
+
+# terraform.tfvars を編集して実際の値を設定
+vi terraform.tfvars
+
+# Terraformの初期化と実行
+terraform init
+terraform plan
+terraform apply
+```
+
+### 5. Docker環境の起動
+
+```bash
+# プロジェクトルートに戻る
+cd ..
+
 # コンテナのビルドと起動
 docker compose up -d
 
@@ -91,10 +114,12 @@ python main.py
 
 このコマンドで以下が実行されます：
 1. サンプルデータの生成
-2. GCS バケットとBigQuery データセットの作成
+2. GCS バケットの作成とBigQuery データセットの確認
 3. データファイルのGCSアップロード
 4. BigQueryへのデータロード
 5. データ検証
+
+**注意**: BigQueryデータセットは事前にTerraformで作成されている必要があります。
 
 ### Phase 2: dbt によるデータ変換
 

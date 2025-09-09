@@ -18,9 +18,12 @@ def main():
     """
     パイプラインのメイン処理
 
+    前提条件：
+    - BigQueryデータセットがTerraformで事前作成されていること
+
     実行される処理の流れ：
     1. サンプルデータの生成
-    2. GCP環境のセットアップ  
+    2. GCP環境の確認（データセット存在確認等）
     3. データファイルのGCSアップロード
     4. GCSからBigQueryへのデータロード
 
@@ -35,17 +38,17 @@ def main():
     generator.generate_all_data()
     print("✅ Sample data generation completed\n")
 
-    # 2. GCP環境のセットアップ
-    print("Step 2: Setting up GCP environment...")
+    # 2. GCP環境の確認
+    print("Step 2: Verifying GCP environment...")
     try:
         gcs_client = GCSClient()
         bigquery_client = BigQueryClient()
         gcs_client.setup_gcs_bucket()
-        bigquery_client.setup_bigquery_dataset()
-        print("✅ GCP environment setup completed\n")
+        bigquery_client.setup_bigquery_dataset()  # データセット存在確認のみ
+        print("✅ GCP environment verification completed\n")
     except Exception as e:
-        print(f"❌ GCP setup failed: {e}")
-        print("Please check your GCP credentials and configuration.")
+        print(f"❌ GCP environment verification failed: {e}")
+        print("Please check your GCP credentials and ensure the BigQuery dataset is created using Terraform.")
         return False
 
     # 3. データファイルのGCSアップロード

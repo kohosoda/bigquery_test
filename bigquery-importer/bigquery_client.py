@@ -14,18 +14,18 @@ class BigQueryClient:
         self.dataset = None
 
     def setup_bigquery_dataset(self):
-        """BigQueryデータセットの作成またはアクセス確認"""
+        """BigQueryデータセットへのアクセス確認（Terraformで事前作成されている前提）"""
         dataset_id = f"{GCP_PROJECT_ID}.{BIGQUERY_DATASET}"
 
         try:
             self.dataset = self.bigquery_client.get_dataset(dataset_id)
             print(f"Using existing dataset: {BIGQUERY_DATASET}")
         except NotFound:
-            print(f"Creating new dataset: {BIGQUERY_DATASET}")
-            dataset = bigquery.Dataset(dataset_id)
-            dataset.location = "asia-northeast1"
-            dataset.description = "E-commerce sample data for learning data engineering"
-            self.dataset = self.bigquery_client.create_dataset(dataset)
+            raise ValueError(
+                f"Dataset '{BIGQUERY_DATASET}' not found. "
+                f"Please create the dataset using Terraform first. "
+                f"Run 'cd terraform && terraform apply' to create the dataset."
+            )
 
         return self.dataset
 

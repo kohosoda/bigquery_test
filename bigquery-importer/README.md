@@ -25,6 +25,8 @@ bigquery-importer/
 - **GCS アップロード**: データファイルをCloud Storageにアップロード
 - **BigQuery ロード**: GCSからBigQueryにデータをインポート
 
+**重要**: BigQueryデータセットは事前にTerraformで作成されている必要があります。
+
 ## 📋 各ファイルの詳細説明
 
 ### 1. `config.py` - 設定管理
@@ -61,40 +63,52 @@ class SampleDataGenerator:
 - **order_items.csv**: 注文詳細（約15,000件）
 - **access_logs.json**: 10,000件のWebアクセスログ
 
-### 3. `gcp_client.py` - GCP操作クライアント
+### 3. `bigquery_client.py` & `gcs_client.py` - GCP操作クライアント
 ```python
-class GCPClient:
-    def setup_gcs_bucket(self):        # GCSバケット作成
-    def setup_bigquery_dataset(self):  # BigQueryデータセット作成
-    def upload_to_gcs(self):          # ファイルアップロード
+class BigQueryClient:
+    def setup_bigquery_dataset(self):  # BigQueryデータセット確認
     def upload_csv_to_bigquery(self):  # CSVロード
     def upload_json_to_bigquery(self): # JSONロード
+
+class GCSClient:
+    def setup_gcs_bucket(self):        # GCSバケット作成
+    def upload_to_gcs(self):          # ファイルアップロード
 ```
 
 **役割**:
-- **Google Cloud Storage**: ファイル保存
+- **Google Cloud Storage**: ファイル保存とバケット管理
 - **BigQuery**: データウェアハウスへのロード
-- **自動インフラ作成**: バケット・データセットの自動作成
+- **インフラ確認**: データセット存在確認（Terraformで事前作成）
 - **エラーハンドリング**: 堅牢な例外処理
 
 ### 4. `main.py` - メインインポート処理
 ```python
 def main():
     # Step 1: サンプルデータの生成
-    # Step 2: GCP環境のセットアップ  
+    # Step 2: GCP環境の確認  
     # Step 3: データファイルのGCSアップロード
     # Step 4: BigQueryへのデータロード
-    # Step 5: データ検証
 ```
 
 **処理フロー**:
 1. **データ生成**: ローカルでサンプルデータ作成
-2. **GCP準備**: バケット・データセット自動作成
+2. **GCP確認**: GCSバケット作成・BigQueryデータセット確認
 3. **ファイル転送**: GCSにデータアップロード
 4. **データロード**: BigQueryにテーブル作成・データロード
-5. **検証**: 正しくロードされたかチェック
+
+**前提条件**: BigQueryデータセットはTerraformで事前に作成されている必要があります。
 
 ## 🚀 実行方法
+
+### 前提条件の確認
+```bash
+# Terraformでデータセットを作成
+cd terraform
+terraform apply
+
+# プロジェクトルートに戻る
+cd ..
+```
 
 ### 基本的な実行
 ```bash
